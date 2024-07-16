@@ -177,8 +177,9 @@ def test_dos():
                                }''', local_storage_data)
         page.reload()
         page.wait_for_timeout(2000)
-        page.locator(".OrderForm_paymentBlockKaspi__NwO23").click()
-        page.get_by_text("Оформить заказ").click()
+        page.get_by_text("Перейти к оплате").click()
+        page.wait_for_timeout(2000)
+        page.get_by_text("Потдвердить")
         local_storage = page.evaluate('''() => {
                                                                 let data = {};
                                                                 for (let i = 0; i < localStorage.length; i++) {
