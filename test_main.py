@@ -155,7 +155,7 @@ def test_ofo_form():
             json.dump(local_storage, f, ensure_ascii=False, indent=4)
         browser.close()
 
-
+time.sleep(2)
 @allure.step("dos")
 def test_dos():
     with  sync_playwright() as p:
