@@ -11,7 +11,7 @@ import time
 @allure.step("begin")
 def test_main():
     with  sync_playwright() as p:
-        browser = p.chromium.launch()
+        browser = p.chromium.launch(headless=False)
         context = browser.new_context(
         **p.devices["Pixel 5"],
         permissions=["geolocation"],
@@ -20,7 +20,7 @@ def test_main():
     )
 
         page = context.new_page()
-        page.goto("https://dev.daribar.kz/")
+        page.goto("https://daribar.kz/")
         # Загрузка данных в localStorage
         with open("storage_load_deskctop.json", 'r', encoding='utf-8') as f:
             local_storage_data = json.load(f)
@@ -60,7 +60,7 @@ def test_paracetomol():
     )
 
         page = context.new_page()
-        page.goto("https://dev.daribar.kz/products/paracetamol-0-5-10--3c20eebe-3ee1-4d9e-bd34-0ba2afd85286")
+        page.goto("https://daribar.kz/products/paracetamol-0-5-10--3c20eebe-3ee1-4d9e-bd34-0ba2afd85286")
         with open("storage_load2.json", 'r', encoding='utf-8') as f:
             local_storage_data = json.load(f)
 
@@ -71,7 +71,8 @@ def test_paracetomol():
                        }''', local_storage_data)
         page.reload()
         page.wait_for_timeout(2000)
-        page.locator(".mobile_myCart__IJxPF").click()
+        sel=page.locator(".mobile_myCart__IJxPF")
+        sel.click()
         local_storage = page.evaluate('''() => {
                                         let data = {};
                                         for (let i = 0; i < localStorage.length; i++) {
@@ -96,7 +97,7 @@ def test_naiti_apteka():
     )
 
         page = context.new_page()
-        page.goto("https://dev.daribar.kz/cart")
+        page.goto("https://daribar.kz/cart")
         with open("storage_load3.json", 'r', encoding='utf-8') as f:
             local_storage_data = json.load(f)
         page.evaluate('''(data) => {
@@ -131,7 +132,7 @@ def test_ofo_form():
     )
 
         page = context.new_page()
-        page.goto("https://dev.daribar.kz/pharmacies")
+        page.goto("https://daribar.kz/pharmacies")
         with open("storage_load4.json", 'r', encoding='utf-8') as f:
             local_storage_data = json.load(f)
         page.evaluate('''(data) => {
@@ -155,7 +156,6 @@ def test_ofo_form():
             json.dump(local_storage, f, ensure_ascii=False, indent=4)
         browser.close()
 
-time.sleep(2)
 @allure.step("dos")
 def test_dos():
     with  sync_playwright() as p:
@@ -167,7 +167,7 @@ def test_dos():
         locale='en-US',
     )
         page = context.new_page()
-        page.goto("https://dev.daribar.kz/checkout")
+        page.goto("https://daribar.kz/checkout")
         with open("storage_load5.json", 'r', encoding='utf-8') as f:
             local_storage_data = json.load(f)
         page.evaluate('''(data) => {
@@ -177,9 +177,8 @@ def test_dos():
                                }''', local_storage_data)
         page.reload()
         page.wait_for_timeout(2000)
-        page.get_by_text("Перейти к оплате").click()
+        page.get_by_text("Оформить заказ").click()
         page.wait_for_timeout(2000)
-        page.get_by_text("Потдвердить")
         local_storage = page.evaluate('''() => {
                                                                 let data = {};
                                                                 for (let i = 0; i < localStorage.length; i++) {
